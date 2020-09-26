@@ -1,0 +1,5 @@
+{
+  "watch": ["src/server"],
+  "exec": "tsc -p src/server && npm start",
+  "ext": "ts"
+}
