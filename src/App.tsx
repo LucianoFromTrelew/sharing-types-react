@@ -1,15 +1,34 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { APIIndexRouteResponse } from "./server";
+import {
+  APICreateTodoRouteResponse,
+  APIListTodoRouteResponse,
+  Todo
+} from "./server";
 
 function App() {
-  const [msg, setMsg] = useState<string>();
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [title, setTitle] = useState("");
 
   const fetchData = async () => {
-    const res = await fetch("/api/v1");
-    const json: APIIndexRouteResponse = await res.json();
-    setMsg(json.message);
+    const res = await fetch("/api/v1/todos");
+    const json: APIListTodoRouteResponse = await res.json();
+    setTodos(json.data);
+  };
+
+  const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const todo = { title };
+    const res = await fetch("/api/v1/todos", {
+      method: "POST",
+      body: JSON.stringify(todo),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const json: APICreateTodoRouteResponse = await res.json();
+    setTodos([...todos, json.data]);
+    setTitle("");
   };
 
   useEffect(() => {
@@ -18,21 +37,28 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        {msg && <code>{msg}</code>}
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <section>
+        <form onSubmit={onFormSubmit}>
+          <label htmlFor="title" style={{ display: "block" }}>
+            Title
+          </label>
+          <input
+            id="title"
+            placeholder="Title"
+            value={title}
+            onChange={event => setTitle(event.target.value)}
+          />
+        </form>
+      </section>
+      <section>
+        {(todos.length && (
+          <ul>
+            {todos.map(todo => (
+              <li key={todo.id}>{todo.title}</li>
+            ))}
+          </ul>
+        )) || <span>Loading...</span>}
+      </section>
     </div>
   );
 }
