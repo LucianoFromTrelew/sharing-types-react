@@ -2,6 +2,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 **This repo was created as a demo for [this Collected Notes note](https://collectednotes.com/lucianoserruyaaloisi/typescript-sharing-type-definitions-seamlessly-between-server-and-client-with-react-js)**
 
+If you want to use this repository as a template, please do the following:
+
+1. Update `.firebaserc` with your Firebase project's id
+2. Create a service account key file and place at the root level with the name `serviceAccountKey.json`
+
+---
+
 ## Available Scripts
 
 In the project directory, you can run:
