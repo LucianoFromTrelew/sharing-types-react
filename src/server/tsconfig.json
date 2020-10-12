@@ -2,7 +2,7 @@
   "include": ["*.ts"],
   "compilerOptions": {
     "module": "CommonJS",
-    "outDir": "dist",
+    "outDir": "../../dist",
     "esModuleInterop": true
   }
 }

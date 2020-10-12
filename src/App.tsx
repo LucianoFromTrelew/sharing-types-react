@@ -9,11 +9,19 @@ import {
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
-    const res = await fetch("/api/v1/todos");
-    const json: APIListTodoRouteResponse = await res.json();
-    setTodos(json.data);
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/v1/todos");
+      const json: APIListTodoRouteResponse = await res.json();
+      setTodos(json.data);
+    } catch (error) {
+      alert("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,7 +59,7 @@ function App() {
         </form>
       </section>
       <section>
-        {(todos.length && (
+        {(!isLoading && (
           <ul>
             {todos.map(todo => (
               <li key={todo.id}>{todo.title}</li>
